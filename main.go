@@ -54,7 +54,7 @@ func ShowArticle(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
 
     //
-    currArticle, err := utils.GetArticles("2")
+    currArticle, err := utils.GetArticles()
     if err != nil {
         fmt.Println(err.Error())
     }
