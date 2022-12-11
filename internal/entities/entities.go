@@ -10,3 +10,9 @@ type Article struct {
     Announce string `json:announce`
     Text string `json:text`
 }
+
+type User struct {
+    Username string `json:username`
+    Email string `json:email`
+    Password string `json:password`
+}

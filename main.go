@@ -4,7 +4,6 @@ import (
     "fmt"
     "log"
     "net/http"
-    "encoding/json"
 
     // "internal/entities"
     "internal/utils"
@@ -13,6 +12,8 @@ import (
     "github.com/spf13/viper"
     "github.com/joho/godotenv"
 )
+
+
 
 func main() {
     fmt.Println("Hello")
@@ -43,20 +44,10 @@ func RunServer() {
     port := viper.GetString("app.port")
     fmt.Println("port:", port)
 
-    router.HandleFunc("/main/", ShowArticle)
+    // router.HandleFunc("/main/", ShowArticle).Methods("GET")
+    router.Handle("/main/", utils.CheckAuth(utils.ShowArticle)).Methods("GET")
+    router.HandleFunc("/login/", utils.LogIn).Methods("POST")
 
-    http.Handle("/", router)
-    http.ListenAndServe(fmt.Sprintf(":%s", port), nil)
-}
-
-func ShowArticle(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Access-Control-Allow-Origin", "*")
-    w.Header().Set("Content-Type", "application/json")
-
-    //
-    currArticle, err := utils.GetArticles()
-    if err != nil {
-        fmt.Println(err.Error())
-    }
-    json.NewEncoder(w).Encode(currArticle)
+    // http.Handle("/", router)
+    http.ListenAndServe(fmt.Sprintf(":%s", port), router)
 }

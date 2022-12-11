@@ -4,11 +4,13 @@ import (
     "fmt"
     "log"
     "database/sql"
-
-    _ "github.com/go-sql-driver/mysql"
-
+    "net/http"
+    "encoding/json"
+    
     "internal/database"
     "internal/entities"
+
+    _ "github.com/go-sql-driver/mysql"
 )
 
 
@@ -61,4 +63,17 @@ func GetArticles() ([]entities.Article, error) {
     }
 
     return articles, nil
+}
+
+
+func ShowArticle(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Access-Control-Allow-Origin", "*")
+    w.Header().Set("Content-Type", "application/json")
+
+    //
+    currArticle, err := GetArticles()
+    if err != nil {
+        fmt.Println(err.Error())
+    }
+    json.NewEncoder(w).Encode(currArticle)
 }
